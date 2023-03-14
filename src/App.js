@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,6 +11,8 @@ function App() {
     const datas = await axios.get("https://fakestoreapi.com/products");
     const product = await datas.data;
 
+    product[1].title = 'Mens Casual Premium Slim Fit T-Shirts'
+
     setData(product);
     setLoading(false);
   };
@@ -19,12 +20,28 @@ function App() {
   const searchHandler = (event) => {
     const filtered = data.filter(function (e) {
       setLoading(false)
-      return e.title | (e.category == event.target.value);
+      // const converted = e.title
+
+      // return converted == event.target.value
+
+      const converted = e.title
+      const targeting = event.target.value.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+
+      // console.log(converted)
+      // console.log(targeting.charAt(0).toUpperCase() + targeting.slice(1));
+      console.log(targeting)
+
+      return targeting == converted;
     });
-    setLoading(true)
+
+   const capitalizeFirstLetter = (string) => {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
 
-    if (event.target.value != "") {
+
+
+    if (event.target.value !== "") {
       setLoading(false);
       if (filtered.length > 0) {
         setData(filtered);
@@ -34,8 +51,8 @@ function App() {
       } else {
         setLoading(true);
         setEmpty(true);
-        const ingfo = document.querySelector('.ingfo')
-        ingfo.textContent = ''
+        // const ingfo = document.querySelector('.ingfo')
+        // ingfo.textContent = ''
       }
     } else {
       axios
@@ -102,7 +119,7 @@ function App() {
               >
                 <p>{item.title}</p>
                 <i>{item.category}</i>
-                <img src={item.image} width={200} height={150} />
+                <img src={item.image} alt={'gambar banget'} width={200} height={150} />
               </div>
             </>
           );
